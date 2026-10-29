@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>迷你商城</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    .hidden { display: none; }
+    .product { border: 1px solid #ddd; padding: 10px; margin: 8px 0; }
+    #error { color: red; }
+  </style>
+</head>
+<body>
+  <div id="login-page">
+    <h1>迷你商城 - 登录</h1>
+    <input id="username" placeholder="用户名">
+    <input id="password" placeholder="密码" type="password">
+    <button id="login-btn">登录</button>
+    <p id="error"></p>
+  </div>
+
+  <div id="shop-page" class="hidden">
+    <h1>商品列表</h1>
+    <p>购物车：<span id="cart-count">0</span> 件</p>
+    <div id="product-list"></div>
+  </div>
+
+  <script>
+    var products = [
+      { id: 1, name: '键盘', price: 99 },
+      { id: 2, name: '鼠标', price: 49 },
+      { id: 3, name: '显示器', price: 899 }
+    ];
+    var cartCount = 0;
+
+    document.getElementById('login-btn').addEventListener('click', function () {
+      var u = document.getElementById('username').value;
+      var p = document.getElementById('password').value;
+      if (u === 'shop_user' && p === 'password123') {
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('shop-page').classList.remove('hidden');
+        renderProducts();
+      } else {
+        document.getElementById('error').textContent = '用户名或密码错误';
+      }
+    });
+
+    function renderProducts() {
+      var list = document.getElementById('product-list');
+      list.innerHTML = '';
+      products.forEach(function (prod) {
+        var div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = '<span>' + prod.name + ' - ￥' + prod.price + '</span> ' +
+          '<button data-id="' + prod.id + '" class="add-btn">加入购物车</button>';
+        list.appendChild(div);
+      });
+      list.querySelectorAll('.add-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          cartCount++;
+          document.getElementById('cart-count').textContent = cartCount;
+        });
+      });
+    }
+  </script>
+</body>
+</html>
